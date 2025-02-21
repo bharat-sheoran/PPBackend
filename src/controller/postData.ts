@@ -1,30 +1,34 @@
 import { Request, Response } from 'express';
 import { ResponseStatus } from '../util/interface';
 import { IResponseStatus } from '../models/ResponseStatus';
-import mongoose from 'mongoose';
+import { prisma } from '../config/db';
 
 export const addUserToDatabase = async (req: Request, res: Response) => {
-    const { userId, collegeEmail, collegeRollNumber, numbers, alphabets } = req.body;
-    console.log(userId);
+    const {username, dob, userId, collegeEmail, collegeRollNumber, numbers, alphabets } = req.body;
+    console.log(req.body);
     try {
 
-        const newUser: IResponseStatus = new mongoose.models.User({
-            userId,
-            collegeEmail,
-            collegeRollNumber,
-            numbers,
-            alphabets
-        })
+        const savedUser = await prisma.user.create({
+            data: {
+                username: username,
+                userId: userId,
+                email: collegeEmail,
+                collegeRollNo: collegeRollNumber,
+                numbers: numbers,
+                alphabet: alphabets,
+                dob: dob
+            },
+        });
 
-        // Save the new user to the database
-        const savedUser = await newUser.save();
+        console.log(savedUser);
+
         const response: ResponseStatus = {
             status: true,
             userId: savedUser.userId,
-            collegeEmail: savedUser.collegeEmail,
-            collegeRollNumber: savedUser.collegeRollNumber,
+            collegeEmail: savedUser.email,
+            collegeRollNumber: savedUser.collegeRollNo,
             numbers: savedUser.numbers,
-            alphabets: savedUser.alphabets
+            alphabets: savedUser.alphabet
         }
 
         res.status(200).json(response);
