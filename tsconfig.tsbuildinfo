@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/config/db.ts","./src/controller/getdata.ts","./src/controller/postdata.ts","./src/models/responsestatus.ts","./src/router/router.ts","./src/util/interface.ts"],"version":"5.7.3"}
